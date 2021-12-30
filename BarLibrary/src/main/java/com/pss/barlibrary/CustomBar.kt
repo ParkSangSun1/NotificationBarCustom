@@ -47,10 +47,10 @@ class CustomBar {
          * Display the icon of the notification bar and the background in a contrasting color
          * 알림 bar의 아이콘과 백그라운드를 대비되는 색으로 표시
          */
-        fun setContrastBar(a: Activity, color: Int) {
+        fun setContrastBar(a: Activity, barColor: Int) {
             var flags = a.window?.decorView?.systemUiVisibility
             if (flags != null) {
-                if (checkColor(color)) {
+                if (checkColor(barColor)) {
                     flags = flags and View.SYSTEM_UI_FLAG_LIGHT_STATUS_BAR.inv()
                     a.window?.decorView?.systemUiVisibility = flags
                 } else {
@@ -58,7 +58,7 @@ class CustomBar {
                     a.window?.decorView?.systemUiVisibility = flags
                 }
             }
-            a.window?.statusBarColor = color
+            a.window?.statusBarColor = barColor
         }
 
         private fun checkColor(color: Int) =
