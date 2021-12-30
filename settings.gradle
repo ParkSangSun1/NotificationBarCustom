@@ -8,3 +8,4 @@ dependencyResolutionManagement {
 }
 rootProject.name = "NotificationBarCustom"
 include ':app'
+include ':BarLibrary'
