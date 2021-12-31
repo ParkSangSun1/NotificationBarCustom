@@ -5,6 +5,7 @@ import android.graphics.Color
 import android.os.Build
 import android.view.View
 import android.view.WindowManager
+import androidx.annotation.RequiresApi
 
 class CustomBar {
     companion object {
@@ -17,20 +18,15 @@ class CustomBar {
         fun setTransparentBar(a: Activity) = checkSdkVersion(a)
 
         private fun checkSdkVersion(a: Activity) = with(Build.VERSION.SDK_INT) {
-            if (this in 19..20) setTransparentBarNotificationBar(
-                WindowManager.LayoutParams.FLAG_TRANSLUCENT_STATUS,
-                true,
-                a
-            )
-            if (this >= 19) a.window.decorView.systemUiVisibility =
-                View.SYSTEM_UI_FLAG_LAYOUT_STABLE or View.SYSTEM_UI_FLAG_LAYOUT_FULLSCREEN
-            if (this >= 21) {
+            if (this in 19..20 && Build.VERSION.SDK_INT >= Build.VERSION_CODES.KITKAT) setTransparentBarNotificationBar(WindowManager.LayoutParams.FLAG_TRANSLUCENT_STATUS, true, a)
+            if (this >= 19) a.window.decorView.systemUiVisibility = View.SYSTEM_UI_FLAG_LAYOUT_STABLE or View.SYSTEM_UI_FLAG_LAYOUT_FULLSCREEN
+            if (this >= 21 && Build.VERSION.SDK_INT >= Build.VERSION_CODES.KITKAT) {
                 setTransparentBarNotificationBar(
                     WindowManager.LayoutParams.FLAG_TRANSLUCENT_STATUS,
                     false,
                     a
                 )
-                a.window.statusBarColor = Color.TRANSPARENT
+                if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) a.window.statusBarColor = Color.TRANSPARENT
             }
         }
 
@@ -51,17 +47,16 @@ class CustomBar {
             var flags = a.window?.decorView?.systemUiVisibility
             if (flags != null) {
                 if (checkColor(barColor)) {
-                    flags = flags and View.SYSTEM_UI_FLAG_LIGHT_STATUS_BAR.inv()
+                    if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) flags = flags and View.SYSTEM_UI_FLAG_LIGHT_STATUS_BAR.inv()
                     a.window?.decorView?.systemUiVisibility = flags
                 } else {
-                    flags = flags or View.SYSTEM_UI_FLAG_LIGHT_STATUS_BAR
+                    if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) flags = flags or View.SYSTEM_UI_FLAG_LIGHT_STATUS_BAR
                     a.window?.decorView?.systemUiVisibility = flags
                 }
             }
             a.window?.statusBarColor = barColor
         }
 
-        private fun checkColor(color: Int) =
-            1 - (0.299 * Color.red(color) + 0.587 * Color.green(color) + 0.114 * Color.blue(color)) / 255 >= 0.5
+        private fun checkColor(color: Int) = 1 - (0.299 * Color.red(color) + 0.587 * Color.green(color) + 0.114 * Color.blue(color)) / 255 >= 0.5
     }
 }
