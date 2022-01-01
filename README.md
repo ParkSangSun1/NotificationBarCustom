@@ -65,7 +65,7 @@ setTransparentBar(this)
 
 <br>
 
-###### Contrast
+#### Contrast
 ```
 setContrastBar(this, Color.parseColor("#FFFFFF"))
 setContrastBar(this, Color.parseColor("#000000"))
