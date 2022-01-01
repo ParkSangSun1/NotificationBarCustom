@@ -55,7 +55,7 @@ setContrastBar(activity, colorInt)
 activity : Activity<br>
 colorInt : Notification statusBar color
 <br>
-
+<br>
 
 ### Example
 #### Transparent
